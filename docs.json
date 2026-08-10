@@ -6,7 +6,10 @@
     "light": "/logo/senderz logo (screenshot).jpg",
     "dark": "/logo/senderz logo (screenshot).jpg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": {
+    "light": "/images/senderz_favicon_reversed_rounded_512.png",
+    "dark": "/images/senderz_favicon_reversed_rounded_512.png"
+  },
   "colors": {
     "primary": "#00E8FC",
     "light": "#00E8FC",
@@ -118,12 +121,12 @@
         "title": "Product",
         "items": [
           {
-            "label": "Brand Dashboard",
-            "href": "https://senderz.ai"
+            "label": "Enterprise Brands",
+            "href": "https://senderz.ai/brand_form"
           },
           {
-            "label": "CPaaS Portal",
-            "href": "https://senderz.ai"
+            "label": "CPaaS and Aggregators",
+            "href": "https://senderz.ai/cpaas_form"
           },
           {
             "label": "Pricing",
@@ -148,5 +151,6 @@
   },
   "feedback": {
     "thumbsRating": true
-  }
+  },
+  "description": "Senderz API: register and manage SMS Sender IDs across 60+ global markets, and send compliant A2P business messages. Built for CPaaS providers, aggregators, and enterprise brands."
 }
