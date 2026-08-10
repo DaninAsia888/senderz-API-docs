@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "venus",
+  "theme": "luma",
   "name": "Senderz API",
   "logo": {
     "light": "/logo/senderz-light.svg",
