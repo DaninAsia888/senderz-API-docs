@@ -3,8 +3,8 @@
   "theme": "luma",
   "name": "Senderz API",
   "logo": {
-    "light": "/logo/senderz-light.svg",
-    "dark": "/logo/senderz-dark.svg"
+    "light": "/logo/senderz_favicon_reversed_rounded_512.png",
+    "dark": "/logo/senderz_favicon_reversed_rounded_512.png"
   },
   "favicon": "/favicon.svg",
   "colors": {
