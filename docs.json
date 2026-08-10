@@ -10,11 +10,7 @@
   "colors": {
     "primary": "#00E8FC",
     "light": "#00E8FC",
-    "dark": "#080824",
-    "background": {
-      "dark": "#080824",
-      "light": "#FFFFFF"
-    }
+    "dark": "#080824"
   },
   "font": {
     "headings": {
@@ -121,16 +117,31 @@
       {
         "title": "Product",
         "items": [
-          { "name": "Brand Dashboard", "url": "https://senderz.ai" },
-          { "name": "CPaaS Portal", "url": "https://senderz.ai" },
-          { "name": "Pricing", "url": "https://senderz.ai/pricing" }
+          {
+            "label": "Brand Dashboard",
+            "href": "https://senderz.ai"
+          },
+          {
+            "label": "CPaaS Portal",
+            "href": "https://senderz.ai"
+          },
+          {
+            "label": "Pricing",
+            "href": "https://senderz.ai/pricing"
+          }
         ]
       },
       {
         "title": "Company",
         "items": [
-          { "name": "About", "url": "https://senderz.ai/about" },
-          { "name": "Contact", "url": "mailto:hello@senderz.ai" }
+          {
+            "label": "About",
+            "href": "https://senderz.ai/about"
+          },
+          {
+            "label": "Contact",
+            "href": "mailto:hello@senderz.ai"
+          }
         ]
       }
     ]
