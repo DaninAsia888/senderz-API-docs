@@ -65,22 +65,6 @@
         ]
       },
       {
-        "tab": "Messaging API",
-        "icon": "message",
-        "groups": [
-          {
-            "group": "Messages",
-            "pages": [
-              "messaging-api/overview",
-              "messaging-api/send-message",
-              "messaging-api/get-message",
-              "messaging-api/list-messages",
-              "messaging-api/cancel-message"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "Sender ID API",
         "icon": "shield-check",
         "groups": [
@@ -102,6 +86,22 @@
               "sender-id-api/get-sid",
               "sender-id-api/list-sids",
               "sender-id-api/deregister-sid"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Messaging API",
+        "icon": "message",
+        "groups": [
+          {
+            "group": "Messages",
+            "pages": [
+              "messaging-api/overview",
+              "messaging-api/send-message",
+              "messaging-api/get-message",
+              "messaging-api/list-messages",
+              "messaging-api/cancel-message"
             ]
           }
         ]
