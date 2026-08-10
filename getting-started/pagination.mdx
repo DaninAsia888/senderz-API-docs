@@ -1,0 +1,45 @@
+---
+title: "Pagination"
+description: "Cursor-based pagination for all list endpoints."
+---
+
+## How it works
+
+All list endpoints return cursor-based pagination. This avoids page drift when records are created or deleted between requests.
+
+```json
+{
+  "ok": true,
+  "data": [ ... ],
+  "pagination": {
+    "has_more": true,
+    "next_cursor": "cur_xyz789",
+    "page_size": 50
+  }
+}
+```
+
+## Query parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `cursor` | string | — | Cursor from a previous response's `pagination.next_cursor`. Omit for the first page. |
+| `page_size` | integer | 50 | Number of results per page. Maximum 100. |
+
+## Example
+
+Fetch the first page:
+
+```bash
+curl "https://api.senderz.ai/v1/messaging/messages?page_size=25" \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"
+```
+
+Fetch the next page using the returned cursor:
+
+```bash
+curl "https://api.senderz.ai/v1/messaging/messages?page_size=25&cursor=cur_xyz789" \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"
+```
+
+When `pagination.has_more` is `false`, you have reached the last page.

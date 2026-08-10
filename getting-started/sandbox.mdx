@@ -1,0 +1,38 @@
+---
+title: "Sandbox"
+description: "Test your integration without sending real messages or submitting SID registrations."
+---
+
+## Overview
+
+All endpoints are available in sandbox mode using `sz_test_` API keys. Sandbox mirrors production behaviour with simulated external systems.
+
+## Messaging sandbox
+
+- Messages are validated and logged but **not dispatched** to any carrier.
+- Delivery report callbacks are simulated: `delivered` after 2 seconds.
+- To test failure flows, send to a number ending in `0000` (e.g. `+61400000000`). These messages return `failed` status.
+- You are not charged for sandbox messages.
+
+```bash
+curl -X POST https://api.senderz.ai/v1/messaging/messages \
+  -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "to": "+61412345678",
+    "sender_id": "TestBrand",
+    "body": "Sandbox test: your order SYD-12345 has been dispatched.",
+    "market": "AU"
+  }'
+```
+
+## Sender ID sandbox
+
+- Registrations are validated against market rules but **not submitted** to any register.
+- Status transitions are simulated on a 5-minute cycle: `pending_review` > `pending_register` > `registered`.
+- To test rejection flows, use a `match_value` starting with `REJECT` (e.g. `REJECT Test Pty Ltd`). These SIDs move to `rejected` status with a simulated rejection reason.
+
+## Brand sandbox
+
+- Verification is simulated. Brands with valid identifiers are auto-verified within 10 seconds.
+- ABNs starting with `99` are auto-rejected for testing error flows.

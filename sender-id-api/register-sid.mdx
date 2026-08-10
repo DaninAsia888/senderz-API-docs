@@ -1,0 +1,75 @@
+---
+title: "Register a Sender ID"
+api: "POST /v1/sids"
+description: "Submit a new Sender ID for registration on a market register."
+---
+
+**Required permission:** `sids:write`
+
+The owning brand must be in `verified` status before a SID can be registered.
+
+## Request body
+
+<ParamField body="sender_id" type="string" required>
+  The alphanumeric Sender ID. 2-11 characters. Cannot be numbers only.
+</ParamField>
+
+<ParamField body="brand_id" type="string" required>
+  Reference to a previously onboarded and verified brand entity.
+</ParamField>
+
+<ParamField body="market" type="string" required>
+  ISO 3166-1 alpha-2 country code. Determines which register and validation rules apply.
+</ParamField>
+
+<ParamField body="use_case" type="string" required>
+  Plain-text description of intended message content.
+</ParamField>
+
+<ParamField body="match_type" type="string" required>
+  One of: `business_name`, `company_name`, `trademark`, `domain`.
+</ParamField>
+
+<ParamField body="match_value" type="string" required>
+  The registered name, mark, or domain the SID matches against.
+</ParamField>
+
+## Example
+
+```bash
+curl -X POST https://api.senderz.ai/v1/sids \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sender_id": "TrackFast",
+    "brand_id": "brand_f6g7h8i9",
+    "market": "AU",
+    "use_case": "Dispatch and delivery notifications for e-commerce orders.",
+    "match_type": "business_name",
+    "match_value": "TrackFast Logistics Pty Ltd"
+  }'
+```
+
+## Response
+
+<ResponseExample>
+```json 201
+{
+  "ok": true,
+  "data": {
+    "id": "sid_j1k2l3m4",
+    "sender_id": "TrackFast",
+    "brand_id": "brand_f6g7h8i9",
+    "market": "AU",
+    "status": "pending_review",
+    "match_type": "business_name",
+    "match_value": "TrackFast Logistics Pty Ltd",
+    "created_at": "2026-07-17T14:30:00+10:00"
+  },
+  "meta": {
+    "request_id": "req_yza567",
+    "timestamp": "2026-07-17T14:30:00+10:00"
+  }
+}
+```
+</ResponseExample>

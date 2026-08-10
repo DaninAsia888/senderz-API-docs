@@ -1,0 +1,38 @@
+---
+title: "Brands overview"
+description: "Brands represent the legal entities that own Sender IDs. A brand must be onboarded and verified before registering SIDs."
+---
+
+## What is a brand?
+
+A brand is the legal entity (company, organisation, or sole trader) that owns one or more Sender IDs. Before you can register a Sender ID in any market, the owning brand must be onboarded and verified.
+
+One brand can own many Sender IDs across many markets.
+
+## Brand lifecycle
+
+```
+pending_verification → verified
+                     └→ rejected
+                     └→ suspended
+```
+
+| Status | Description |
+|---|---|
+| `pending_verification` | Submitted. Identity checks in progress. |
+| `verified` | Entity verified. Can register SIDs. |
+| `rejected` | Verification failed. See `rejection_reason`. |
+| `suspended` | Temporarily suspended. |
+
+## Verification
+
+When a brand is onboarded, Senderz verifies the entity against the relevant market register:
+
+| Market | Register | Identifier type |
+|---|---|---|
+| AU | Australian Business Register (ABR) | ABN |
+| AU | ASIC | ACN |
+| NZ | NZBN Register | NZBN |
+| SG | ACRA | UEN |
+
+Verification is typically completed within seconds for entities with current register records.

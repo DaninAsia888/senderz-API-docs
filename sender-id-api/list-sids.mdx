@@ -1,0 +1,79 @@
+---
+title: "List Sender IDs"
+api: "GET /v1/sids"
+description: "List Sender ID registrations with optional filters."
+---
+
+**Required permission:** `sids:read`
+
+## Query parameters
+
+<ParamField query="market" type="string">
+  Filter by ISO 3166-1 alpha-2 country code.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by SID status: `pending_review`, `pending_register`, `pending_brand_confirmation`, `registered`, `rejected`, `suspended`, `deregistered`.
+</ParamField>
+
+<ParamField query="brand_id" type="string">
+  Filter by brand entity.
+</ParamField>
+
+<ParamField query="sender_id" type="string">
+  Filter by Sender ID string (partial match).
+</ParamField>
+
+<ParamField query="cursor" type="string">
+  Pagination cursor.
+</ParamField>
+
+<ParamField query="page_size" type="integer" default="50">
+  Results per page. Maximum 100.
+</ParamField>
+
+## Example
+
+```bash
+curl "https://api.senderz.ai/v1/sids?market=AU&status=registered&page_size=25" \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx"
+```
+
+## Response
+
+<ResponseExample>
+```json 200
+{
+  "ok": true,
+  "data": [
+    {
+      "id": "sid_j1k2l3m4",
+      "sender_id": "TrackFast",
+      "brand_id": "brand_f6g7h8i9",
+      "market": "AU",
+      "status": "registered",
+      "created_at": "2026-07-17T14:30:00+10:00",
+      "registered_at": "2026-07-18T09:15:00+10:00"
+    },
+    {
+      "id": "sid_n5o6p7q8",
+      "sender_id": "SecurBank",
+      "brand_id": "brand_j1k2l3m4",
+      "market": "AU",
+      "status": "registered",
+      "created_at": "2026-07-15T09:00:00+10:00",
+      "registered_at": "2026-07-16T11:30:00+10:00"
+    }
+  ],
+  "pagination": {
+    "has_more": false,
+    "next_cursor": null,
+    "page_size": 25
+  },
+  "meta": {
+    "request_id": "req_efg123",
+    "timestamp": "2026-07-18T10:05:00+10:00"
+  }
+}
+```
+</ResponseExample>

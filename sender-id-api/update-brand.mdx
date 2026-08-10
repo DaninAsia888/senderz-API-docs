@@ -1,0 +1,65 @@
+---
+title: "Update brand contact"
+api: "PATCH /v1/brands/{brand_id}"
+description: "Update a brand's contact details or website. Entity name and identifier are immutable after verification."
+---
+
+**Required permission:** `brands:write`
+
+Only `contact` and `website` fields are mutable after verification. Changes to `name`, `identifier_type`, or `identifier_value` require a new brand submission.
+
+## Path parameters
+
+<ParamField path="brand_id" type="string" required>
+  The brand ID (e.g. `brand_f6g7h8i9`).
+</ParamField>
+
+## Request body
+
+<ParamField body="contact" type="object">
+  Updated contact details. Include `name`, `email`, and/or `phone`.
+</ParamField>
+
+<ParamField body="website" type="string">
+  Updated entity website.
+</ParamField>
+
+## Example
+
+```bash
+curl -X PATCH https://api.senderz.ai/v1/brands/brand_f6g7h8i9 \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contact": {
+      "name": "James Park",
+      "email": "james@trackfast.com.au",
+      "phone": "+61400654321"
+    }
+  }'
+```
+
+## Response
+
+<ResponseExample>
+```json 200
+{
+  "ok": true,
+  "data": {
+    "id": "brand_f6g7h8i9",
+    "name": "TrackFast Logistics Pty Ltd",
+    "status": "verified",
+    "contact": {
+      "name": "James Park",
+      "email": "james@trackfast.com.au",
+      "phone": "+61400654321"
+    },
+    "updated_at": "2026-07-18T10:00:00+10:00"
+  },
+  "meta": {
+    "request_id": "req_vwx234",
+    "timestamp": "2026-07-18T10:00:00+10:00"
+  }
+}
+```
+</ResponseExample>

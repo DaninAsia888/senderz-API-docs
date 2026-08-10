@@ -1,0 +1,141 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "venus",
+  "name": "Senderz API",
+  "logo": {
+    "light": "/logo/senderz-light.svg",
+    "dark": "/logo/senderz-dark.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#00E8FC",
+    "light": "#00E8FC",
+    "dark": "#080824",
+    "background": {
+      "dark": "#080824",
+      "light": "#FFFFFF"
+    }
+  },
+  "font": {
+    "headings": {
+      "family": "Montserrat",
+      "weight": 700
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Sign In",
+      "url": "https://senderz.ai"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get API Key",
+    "url": "https://senderz.ai"
+  },
+  "anchors": [
+    {
+      "name": "API Status",
+      "icon": "signal",
+      "url": "https://status.senderz.ai"
+    },
+    {
+      "name": "Support",
+      "icon": "envelope",
+      "url": "mailto:support@senderz.ai"
+    }
+  ],
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Getting Started",
+        "icon": "rocket",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "getting-started/introduction",
+              "getting-started/authentication",
+              "getting-started/errors",
+              "getting-started/pagination"
+            ]
+          },
+          {
+            "group": "Integration",
+            "pages": [
+              "getting-started/webhooks",
+              "getting-started/sandbox"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Messaging API",
+        "icon": "message",
+        "groups": [
+          {
+            "group": "Messages",
+            "pages": [
+              "messaging-api/overview",
+              "messaging-api/send-message",
+              "messaging-api/get-message",
+              "messaging-api/list-messages",
+              "messaging-api/cancel-message"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Sender ID API",
+        "icon": "shield-check",
+        "groups": [
+          {
+            "group": "Brands",
+            "pages": [
+              "sender-id-api/brands-overview",
+              "sender-id-api/onboard-brand",
+              "sender-id-api/get-brand",
+              "sender-id-api/list-brands",
+              "sender-id-api/update-brand"
+            ]
+          },
+          {
+            "group": "Sender IDs",
+            "pages": [
+              "sender-id-api/sids-overview",
+              "sender-id-api/register-sid",
+              "sender-id-api/get-sid",
+              "sender-id-api/list-sids",
+              "sender-id-api/deregister-sid"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "linkedin": "https://www.linkedin.com/company/senderz",
+      "website": "https://senderz.ai"
+    },
+    "links": [
+      {
+        "title": "Product",
+        "items": [
+          { "name": "Brand Dashboard", "url": "https://senderz.ai" },
+          { "name": "CPaaS Portal", "url": "https://senderz.ai" },
+          { "name": "Pricing", "url": "https://senderz.ai/pricing" }
+        ]
+      },
+      {
+        "title": "Company",
+        "items": [
+          { "name": "About", "url": "https://senderz.ai/about" },
+          { "name": "Contact", "url": "mailto:hello@senderz.ai" }
+        ]
+      }
+    ]
+  },
+  "feedback": {
+    "thumbsRating": true
+  }
+}

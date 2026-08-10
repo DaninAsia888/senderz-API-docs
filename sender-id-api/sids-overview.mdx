@@ -1,0 +1,43 @@
+---
+title: "Sender IDs overview"
+description: "Register and manage alphanumeric Sender IDs across global markets via API."
+---
+
+## What is a Sender ID?
+
+A Sender ID (SID) is the alphanumeric name displayed as the sender when an SMS arrives on a recipient's handset. For example, `TrackFast` instead of a random phone number.
+
+In markets with mandatory SID pre-registration (such as Australia under the ACMA SMS Sender ID Register), unregistered SIDs are replaced with `Unverified`. Registering your SIDs ensures your brand appears as intended.
+
+## SID lifecycle
+
+```
+pending_review → pending_register → pending_brand_confirmation → registered
+              └→ rejected                                      └→ suspended
+                                                                └→ deregistered
+```
+
+| Status | Description |
+|---|---|
+| `pending_review` | Submitted, awaiting Senderz validation |
+| `pending_register` | Validated, submitted to market register |
+| `pending_brand_confirmation` | Awaiting brand owner confirmation (e.g. ACMA Assist/myID step for AU) |
+| `registered` | Live on the register. Messages display the branded SID. |
+| `rejected` | Registration denied. See `rejection_reason`. |
+| `suspended` | Temporarily suspended by register or Senderz. |
+| `deregistered` | Removed from register. |
+
+## SID rules
+
+| Rule | Value |
+|---|---|
+| Length | 2-11 characters |
+| Characters | Alphanumeric (A-Z, a-z, 0-9) and spaces |
+| Restriction | Cannot be numbers only |
+| Match requirement | Must match the brand's registered business name, company name, trademark, or domain |
+
+## Market-specific validation
+
+Validation rules are applied server-side based on the `market` field. For example, the AU market applies ACMA restricted-word checks and ABR cross-referencing. A `422` response with a market-specific error code is returned if rules are violated.
+
+New markets are added by extending the market configuration. No API version change is required. Customers integrating against `/v1/` pick up new markets by passing the relevant country code.

@@ -1,0 +1,49 @@
+---
+title: "Overview"
+description: "Send and track 1-way A2P SMS messages via registered Sender IDs."
+---
+
+## Messaging API
+
+The Messaging API lets you send outbound SMS messages to recipients worldwide using registered alphanumeric Sender IDs. Messages are 1-way (mobile-terminated only).
+
+Common use cases:
+
+- **OTP / 2FA codes** (e.g. `"829104 is your verification code. Expires in 5 minutes."`)
+- **Logistics notifications** (e.g. `"Your order SYD-90421 has been dispatched. Expected delivery: tomorrow by 5pm."`)
+- **Promotional alerts** (e.g. `"Flash sale: 30% off all winter styles. Ends midnight. Shop now at example.com/sale"`)
+
+## Message lifecycle
+
+```
+queued → sent → delivered
+                └→ undelivered
+       └→ failed
+```
+
+| Status | Description |
+|---|---|
+| `queued` | Accepted, pending dispatch |
+| `sent` | Dispatched to carrier |
+| `delivered` | Delivery confirmed by carrier |
+| `undelivered` | Carrier confirmed non-delivery |
+| `failed` | Rejected before dispatch (validation, compliance, or system error) |
+| `scheduled` | Queued for future delivery |
+| `cancelled` | Scheduled message cancelled before dispatch |
+
+## Encoding
+
+Message content is auto-encoded as GSM-7 (standard ASCII, 160 chars per segment) or UCS-2 (Unicode, 70 chars per segment). Long messages are auto-concatenated into multiple segments.
+
+## Pricing
+
+Each message reports its cost in the response:
+
+```json
+"price": {
+  "amount": "0.055",
+  "currency": "AUD"
+}
+```
+
+Pricing varies by destination market. Multi-segment messages are charged per segment.

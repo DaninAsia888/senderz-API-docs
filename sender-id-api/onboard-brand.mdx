@@ -1,0 +1,76 @@
+---
+title: "Onboard a brand"
+api: "POST /v1/brands"
+description: "Submit a new brand entity for verification."
+---
+
+**Required permission:** `brands:write`
+
+## Request body
+
+<ParamField body="name" type="string" required>
+  Legal entity name as registered (e.g. `"TrackFast Logistics Pty Ltd"`).
+</ParamField>
+
+<ParamField body="identifier_type" type="string" required>
+  One of: `ABN`, `ACN`, `NZBN`, `UEN`, or other market-specific identifier.
+</ParamField>
+
+<ParamField body="identifier_value" type="string" required>
+  The registration number (e.g. `"54655807695"`).
+</ParamField>
+
+<ParamField body="market" type="string" required>
+  Primary market for this entity. ISO 3166-1 alpha-2.
+</ParamField>
+
+<ParamField body="contact" type="object" required>
+  Authorised representative. Must include `name`, `email`, and `phone`.
+</ParamField>
+
+<ParamField body="website" type="string">
+  Entity website. Used for domain-match SID validation.
+</ParamField>
+
+## Example
+
+```bash
+curl -X POST https://api.senderz.ai/v1/brands \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "TrackFast Logistics Pty Ltd",
+    "identifier_type": "ABN",
+    "identifier_value": "12345678901",
+    "market": "AU",
+    "contact": {
+      "name": "Sarah Chen",
+      "email": "sarah@trackfast.com.au",
+      "phone": "+61400123456"
+    },
+    "website": "https://trackfast.com.au"
+  }'
+```
+
+## Response
+
+<ResponseExample>
+```json 201
+{
+  "ok": true,
+  "data": {
+    "id": "brand_f6g7h8i9",
+    "name": "TrackFast Logistics Pty Ltd",
+    "identifier_type": "ABN",
+    "identifier_value": "12345678901",
+    "market": "AU",
+    "status": "verified",
+    "created_at": "2026-07-17T14:30:00+10:00"
+  },
+  "meta": {
+    "request_id": "req_mno345",
+    "timestamp": "2026-07-17T14:30:00+10:00"
+  }
+}
+```
+</ResponseExample>

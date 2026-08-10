@@ -1,0 +1,59 @@
+---
+title: "Errors"
+description: "Consistent error envelope and HTTP status codes across all endpoints."
+---
+
+## Error response format
+
+All error responses use a consistent envelope:
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "invalid_sender_id",
+    "message": "Sender ID 'TOOLONG12345' exceeds 11 character limit.",
+    "param": "sender_id",
+    "doc_url": "https://developers.senderz.ai/errors/invalid_sender_id"
+  },
+  "meta": {
+    "request_id": "req_abc124",
+    "timestamp": "2026-07-17T14:30:01+10:00"
+  }
+}
+```
+
+| Field | Description |
+|---|---|
+| `error.code` | Machine-readable error identifier. Stable across API versions. |
+| `error.message` | Human-readable explanation. May change without notice. |
+| `error.param` | The request parameter that caused the error, if applicable. |
+| `error.doc_url` | Link to documentation for this specific error. |
+| `meta.request_id` | Unique identifier for this request. Include in support queries. |
+
+## HTTP status codes
+
+| Code | Meaning |
+|---|---|
+| `200` | Success |
+| `201` | Created |
+| `400` | Validation error. Check `error.param`. |
+| `401` | Missing or invalid API key. |
+| `403` | Key lacks required permission. |
+| `404` | Resource not found. |
+| `409` | Conflict (e.g. duplicate SID registration). |
+| `422` | Unprocessable. The request is valid JSON but violates market-specific rules. |
+| `429` | Rate limited. Retry after the `X-RateLimit-Reset` timestamp. |
+| `500` | Internal error. Retry with exponential backoff. |
+
+## Rate limiting
+
+Default: 100 requests per second per API key. Rate limit headers are returned on every response:
+
+```
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 87
+X-RateLimit-Reset: 1721200260
+```
+
+When rate limited (429), wait until the `X-RateLimit-Reset` Unix timestamp before retrying.

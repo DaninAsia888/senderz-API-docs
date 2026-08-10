@@ -1,0 +1,67 @@
+---
+title: "Introduction"
+description: "The Senderz API provides programmatic access to A2P messaging and Sender ID registration across global markets."
+---
+
+## Two APIs, one integration
+
+The Senderz platform exposes two resource namespaces under a single authentication and versioning model:
+
+<CardGroup cols={2}>
+  <Card title="Messaging API" icon="message" href="/messaging-api/overview">
+    Send and track 1-way A2P SMS messages via registered Sender IDs. OTP, logistics notifications, promotional alerts.
+  </Card>
+  <Card title="Sender ID API" icon="shield-check" href="/sender-id-api/brands-overview">
+    Register, manage, and monitor Sender ID registrations across supported markets. Onboard brands, submit SIDs, track approval status.
+  </Card>
+</CardGroup>
+
+CPaaS providers, aggregators, and enterprise customers can use one or both namespaces depending on their integration needs.
+
+## Base URL
+
+All API requests use:
+
+```
+https://api.senderz.ai
+```
+
+## Quick start
+
+<Steps>
+  <Step title="Get your API key">
+    Sign in to the [Senderz dashboard](https://senderz.ai) and generate an API key. Use `sz_test_` keys for sandbox testing, `sz_live_` keys for production.
+  </Step>
+  <Step title="Send your first message">
+    ```bash
+    curl -X POST https://api.senderz.ai/v1/messaging/messages \
+      -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "to": "+61400000000",
+        "sender_id": "SecurBank",
+        "body": "483291 is your verification code. It expires in 5 minutes. Do not share this code.",
+        "market": "AU"
+      }'
+    ```
+  </Step>
+  <Step title="Check delivery status">
+    ```bash
+    curl https://api.senderz.ai/v1/messaging/messages/msg_a1b2c3d4e5 \
+      -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx"
+    ```
+  </Step>
+</Steps>
+
+## Key concepts
+
+| Concept | Description |
+|---|---|
+| **Market** | ISO 3166-1 alpha-2 country code (e.g. `AU`, `SG`, `HK`). Required on every resource. Determines routing and compliance rules. |
+| **Brand** | The legal entity that owns Sender IDs. Must be onboarded and verified before SID registration. |
+| **Sender ID** | An alphanumeric identifier (2-11 chars) displayed as the message sender. Must be registered on the relevant market register. |
+| **Message** | A single outbound SMS dispatched via a registered Sender ID. |
+
+## Versioning
+
+The API version is embedded in the URL path: `/v1/`. Breaking changes increment the version. Non-breaking additions (new optional fields, new event types) do not.

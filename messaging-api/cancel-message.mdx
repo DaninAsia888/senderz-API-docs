@@ -1,0 +1,41 @@
+---
+title: "Cancel a scheduled message"
+api: "DELETE /v1/messaging/messages/{message_id}"
+description: "Cancel a message that is currently in scheduled status."
+---
+
+**Required permission:** `messaging:send`
+
+Only valid for messages with status `scheduled`. Returns `409 Conflict` if the message has already been dispatched.
+
+## Path parameters
+
+<ParamField path="message_id" type="string" required>
+  The message ID of the scheduled message to cancel.
+</ParamField>
+
+## Example
+
+```bash
+curl -X DELETE https://api.senderz.ai/v1/messaging/messages/msg_k1l2m3n4o5 \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx"
+```
+
+## Response
+
+<ResponseExample>
+```json 200
+{
+  "ok": true,
+  "data": {
+    "id": "msg_k1l2m3n4o5",
+    "status": "cancelled",
+    "cancelled_at": "2026-07-17T15:00:00+10:00"
+  },
+  "meta": {
+    "request_id": "req_jkl012",
+    "timestamp": "2026-07-17T15:00:00+10:00"
+  }
+}
+```
+</ResponseExample>
