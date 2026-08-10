@@ -125,14 +125,15 @@
             "href": "https://senderz.ai/brand_form"
           },
           {
-            "label": "CPaaS and Aggregators",
+            "label": "CPaaS Providers",
             "href": "https://senderz.ai/cpaas_form"
           },
           {
-            "label": "Pricing",
-            "href": "https://senderz.ai/pricing"
+            "label": "SMS Aggregators",
+            "href": "https://senderz.ai/cpaas_form"
           }
-        ]
+        ],
+        "header": "Sender ID Registration Forms"
       },
       {
         "title": "Company",
@@ -142,10 +143,19 @@
             "href": "https://senderz.ai/about"
           },
           {
+            "label": "FAQ",
+            "href": "https://senderz.ai/faq"
+          },
+          {
             "label": "Contact",
             "href": "mailto:hello@senderz.ai"
+          },
+          {
+            "label": "Pricing",
+            "href": "https://senderz.ai/pricing"
           }
-        ]
+        ],
+        "header": "Resources"
       }
     ]
   },
