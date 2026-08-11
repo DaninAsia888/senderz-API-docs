@@ -1,6 +1,6 @@
 ---
 title: "Webhooks"
-description: "Receive real-time event notifications for message delivery, SID status changes, and brand verification."
+description: "Receive real-time event notifications for SID status changes, brand verification, and message delivery."
 ---
 
 ## Subscribe to events
@@ -14,22 +14,12 @@ POST /v1/webhooks
 ```json
 {
   "url": "https://yourapp.com/webhooks/senderz",
-  "events": ["message.delivered", "message.failed", "sid.status_changed"],
+  "events": ["sid.status_changed", "brand.verified", "message.delivered"],
   "secret": "whsec_your_signing_secret"
 }
 ```
 
 ## Event types
-
-### Messaging events
-
-| Event | Trigger |
-|---|---|
-| `message.queued` | Message accepted |
-| `message.sent` | Dispatched to carrier |
-| `message.delivered` | Carrier delivery confirmed |
-| `message.undelivered` | Carrier non-delivery confirmed |
-| `message.failed` | Rejected pre-dispatch |
 
 ### Sender ID events
 
@@ -47,24 +37,30 @@ POST /v1/webhooks
 | `brand.verified` | Brand entity verified |
 | `brand.rejected` | Brand verification failed |
 
+### Messaging events
+
+| Event | Trigger |
+|---|---|
+| `message.queued` | Message accepted |
+| `message.sent` | Dispatched to carrier |
+| `message.delivered` | Carrier delivery confirmed |
+| `message.undelivered` | Carrier non-delivery confirmed |
+| `message.failed` | Rejected pre-dispatch |
+
 ## Payload format
 
 ```json
 {
   "id": "evt_x1y2z3",
-  "type": "message.delivered",
-  "created_at": "2026-07-17T14:30:03+10:00",
+  "type": "sid.registered",
+  "created_at": "2026-07-18T09:15:00+10:00",
   "data": {
-    "id": "msg_a1b2c3d4e5",
-    "status": "delivered",
-    "to": "+61400000000",
+    "id": "sid_j1k2l3m4",
     "sender_id": "TrackFast",
-    "reference": "shipment-SYD-90421",
-    "delivered_at": "2026-07-17T14:30:03+10:00",
-    "price": {
-      "amount": "0.055",
-      "currency": "AUD"
-    }
+    "brand_id": "brand_f6g7h8i9",
+    "market": "AU",
+    "status": "registered",
+    "registered_at": "2026-07-18T09:15:00+10:00"
   }
 }
 ```

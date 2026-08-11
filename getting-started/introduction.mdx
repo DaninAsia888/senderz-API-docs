@@ -32,23 +32,50 @@ https://api.senderz.ai
   <Step title="Get your API key">
     Sign in to the [Senderz dashboard](https://senderz.ai) and generate an API key. Use `sz_test_` keys for sandbox testing, `sz_live_` keys for production.
   </Step>
-  <Step title="Send your first message">
+  <Step title="Onboard a brand">
+    ```bash
+    curl -X POST https://api.senderz.ai/v1/brands \
+      -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "name": "TrackFast Logistics Pty Ltd",
+        "identifier_type": "ABN",
+        "identifier_value": "12345678901",
+        "market": "AU",
+        "contact": {
+          "name": "Sarah Chen",
+          "email": "sarah@trackfast.com.au",
+          "phone": "+61400123456"
+        }
+      }'
+    ```
+  </Step>
+  <Step title="Register a Sender ID">
+    ```bash
+    curl -X POST https://api.senderz.ai/v1/sids \
+      -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "sender_id": "TrackFast",
+        "brand_id": "brand_f6g7h8i9",
+        "market": "AU",
+        "use_case": "Dispatch and delivery notifications for e-commerce orders.",
+        "match_type": "business_name",
+        "match_value": "TrackFast Logistics Pty Ltd"
+      }'
+    ```
+  </Step>
+  <Step title="Send a message">
     ```bash
     curl -X POST https://api.senderz.ai/v1/messaging/messages \
       -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
       -H "Content-Type: application/json" \
       -d '{
-        "to": "+61400000000",
-        "sender_id": "SecurBank",
-        "body": "483291 is your verification code. It expires in 5 minutes. Do not share this code.",
+        "to": "+61400123456",
+        "sender_id": "TrackFast",
+        "body": "Your order SYD-90421 has been dispatched. Expected delivery: tomorrow by 5pm.",
         "market": "AU"
       }'
-    ```
-  </Step>
-  <Step title="Check delivery status">
-    ```bash
-    curl https://api.senderz.ai/v1/messaging/messages/msg_a1b2c3d4e5 \
-      -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx"
     ```
   </Step>
 </Steps>

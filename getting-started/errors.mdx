@@ -11,10 +11,10 @@ All error responses use a consistent envelope:
 {
   "ok": false,
   "error": {
-    "code": "invalid_sender_id",
-    "message": "Sender ID 'TOOLONG12345' exceeds 11 character limit.",
+    "code": "sid_market_rule_violation",
+    "message": "Sender ID 'BANK' is a restricted term in market AU.",
     "param": "sender_id",
-    "doc_url": "https://developers.senderz.ai/errors/invalid_sender_id"
+    "doc_url": "https://developers.senderz.ai/errors/sid_market_rule_violation"
   },
   "meta": {
     "request_id": "req_abc124",

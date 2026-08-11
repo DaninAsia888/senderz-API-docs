@@ -15,8 +15,8 @@ Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx
 
 | Prefix | Scope |
 |---|---|
-| `sz_live_` | Production. Messages are delivered. SID submissions go to the register. |
-| `sz_test_` | Sandbox. Messages are simulated. SID submissions are validated but not submitted. |
+| `sz_live_` | Production. SID submissions go to the register. Messages are delivered. |
+| `sz_test_` | Sandbox. SID submissions are validated but not submitted. Messages are simulated. |
 
 ## Permissions
 
@@ -24,22 +24,22 @@ Each API key can hold one or more scoped permissions:
 
 | Permission | Description |
 |---|---|
-| `messaging:send` | Send messages |
-| `messaging:read` | Read message status and history |
 | `sids:write` | Create, update, deregister Sender IDs |
 | `sids:read` | Read SID status and history |
-| `webhooks:manage` | Create, update, and delete webhook subscriptions |
 | `brands:write` | Onboard and manage brand entities |
 | `brands:read` | Read brand entity details |
+| `messaging:send` | Send messages |
+| `messaging:read` | Read message status and history |
+| `webhooks:manage` | Create, update, and delete webhook subscriptions |
 
-A CPaaS customer would typically hold all permissions. A brand customer sending messages under a pre-registered SID might hold only `messaging:send` and `messaging:read`.
+A CPaaS customer would typically hold all permissions. A brand customer using Senderz only for SID registration might hold `sids:read`, `brands:write`, and `brands:read`.
 
 ## Example
 
 <CodeGroup>
 
 ```bash cURL
-curl https://api.senderz.ai/v1/messaging/messages \
+curl https://api.senderz.ai/v1/sids \
   -H "Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"
 ```
 
@@ -48,13 +48,13 @@ import requests
 
 headers = {"Authorization": "Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"}
 response = requests.get(
-    "https://api.senderz.ai/v1/messaging/messages",
+    "https://api.senderz.ai/v1/sids",
     headers=headers
 )
 ```
 
 ```javascript Node.js
-const response = await fetch("https://api.senderz.ai/v1/messaging/messages", {
+const response = await fetch("https://api.senderz.ai/v1/sids", {
   headers: {
     "Authorization": "Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"
   }
