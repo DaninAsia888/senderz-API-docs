@@ -12,20 +12,27 @@ In markets with mandatory SID pre-registration (such as Australia under the ACMA
 ## SID lifecycle
 
 ```
-pending_review → pending_register → pending_brand_confirmation → registered
-              └→ rejected                                      └→ suspended
-                                                                └→ deregistered
+pending_review → pending_operator_review → approved → pending_register → pending_brand_confirmation → registered
+              └→ rejected               └→ info_requested (resubmit)                                └→ suspended
+                                         └→ rejected                                                  └→ deregistered
 ```
 
 | Status | Description |
 |---|---|
-| `pending_review` | Submitted, awaiting Senderz validation |
-| `pending_register` | Validated, submitted to market register |
-| `pending_brand_confirmation` | Awaiting brand owner confirmation (e.g. ACMA Assist/myID step for AU) |
+| `pending_review` | Submitted, awaiting Senderz validation against market rules. |
+| `pending_operator_review` | Validated by Senderz, sent to the relevant network operator for review. |
+| `info_requested` | Operator has requested additional information. Respond via `PATCH /v1/sids/{id}` with the requested fields. |
+| `approved` | Operator has approved the registration. Proceeds to market register submission. |
+| `pending_register` | Approved, submitted to market register (e.g. ACMA). |
+| `pending_brand_confirmation` | Awaiting brand owner confirmation (e.g. ACMA Assist/myID step for AU). |
 | `registered` | Live on the register. Messages display the branded SID. |
-| `rejected` | Registration denied. See `rejection_reason`. |
+| `rejected` | Registration denied by Senderz validation or by the operator. See `rejection_reason`. |
 | `suspended` | Temporarily suspended by register or Senderz. |
 | `deregistered` | Removed from register. |
+
+<Info>
+  Not all markets include an operator review step. In regulator-led schemes (e.g. AU/ACMA), registrations may proceed directly from `pending_review` to `pending_register`. The `pending_operator_review` and `info_requested` statuses appear in markets with industry-led or operator-led registration schemes.
+</Info>
 
 ## SID rules
 

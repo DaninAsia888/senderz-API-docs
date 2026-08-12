@@ -1,0 +1,77 @@
+---
+title: "Request more information"
+api: "POST /v1/operator-registrations/{registration_id}/request-info"
+description: "Return a registration to the submitter with a request for additional information or evidence."
+---
+
+**Required permission:** `operator:write`
+
+Returns a registration to the submitter for amendment. The registration status moves to `info_requested`. The submitter is notified with the specific information required and can resubmit, at which point the status moves to `resubmitted` and returns to the operator's review queue.
+
+Returns `409 Conflict` if the registration is not in `pending_operator_review` or `resubmitted` status.
+
+## Path parameters
+
+<ParamField path="registration_id" type="string" required>
+  The operator registration ID (e.g. `opreg_a1b2c3d4`).
+</ParamField>
+
+## Request body
+
+<ParamField body="fields_requested" type="array" required>
+  List of specific items the operator requires. Each item should clearly describe what is needed.
+</ParamField>
+
+<ParamField body="detail" type="string" required>
+  Human-readable summary of what is needed and why. This is shared with the submitting brand or aggregator.
+</ParamField>
+
+<ParamField body="notes" type="string">
+  Optional internal notes. Not visible to the submitting brand or aggregator.
+</ParamField>
+
+## Example
+
+```bash
+curl -X POST https://api.senderz.ai/v1/operator-registrations/opreg_a1b2c3d4/request-info \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fields_requested": [
+      "Sample message content for each use case category",
+      "Estimated monthly message volume",
+      "Confirmation of opt-in collection method"
+    ],
+    "detail": "Registration cannot be assessed without sample message content and volume estimates. Please also confirm how recipient consent is collected.",
+    "notes": "Brand looks legitimate but use case is too vague for compliance sign-off."
+  }'
+```
+
+## Response
+
+<ResponseExample>
+```json 200
+{
+  "ok": true,
+  "data": {
+    "id": "opreg_a1b2c3d4",
+    "sender_id": "TrackFast",
+    "status": "info_requested",
+    "info_request": {
+      "fields_requested": [
+        "Sample message content for each use case category",
+        "Estimated monthly message volume",
+        "Confirmation of opt-in collection method"
+      ],
+      "detail": "Registration cannot be assessed without sample message content and volume estimates. Please also confirm how recipient consent is collected."
+    },
+    "info_requested_at": "2026-07-17T15:20:00+10:00",
+    "info_requested_by": "operator_api_key"
+  },
+  "meta": {
+    "request_id": "req_op005",
+    "timestamp": "2026-07-17T15:20:00+10:00"
+  }
+}
+```
+</ResponseExample>

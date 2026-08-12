@@ -1,6 +1,6 @@
 ---
 title: "Webhooks"
-description: "Receive real-time event notifications for SID status changes, brand verification, and message delivery."
+description: "Receive real-time event notifications for SID status changes, operator decisions, brand verification, and message delivery."
 ---
 
 ## Subscribe to events
@@ -14,7 +14,7 @@ POST /v1/webhooks
 ```json
 {
   "url": "https://yourapp.com/webhooks/senderz",
-  "events": ["sid.status_changed", "brand.verified", "message.delivered"],
+  "events": ["sid.status_changed", "operator.registration_approved", "brand.verified"],
   "secret": "whsec_your_signing_secret"
 }
 ```
@@ -29,6 +29,14 @@ POST /v1/webhooks
 | `sid.registered` | SID confirmed live on register |
 | `sid.rejected` | SID registration denied |
 | `sid.expiring` | SID approaching renewal deadline (30-day warning) |
+
+### Operator events
+
+| Event | Trigger |
+|---|---|
+| `operator.registration_received` | New registration submitted for operator review |
+| `operator.registration_approved` | Operator approved a registration |
+| `operator.registration_rejected` | Operator rejected a registration |
 
 ### Brand events
 

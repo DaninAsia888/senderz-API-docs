@@ -1,0 +1,111 @@
+---
+title: "Analytics"
+api: "GET /v1/operator-analytics"
+description: "Retrieve registration volume, approval rates, and processing time metrics for your network."
+---
+
+**Required permission:** `operator:read`
+
+Returns aggregate metrics for registrations submitted to your network, filterable by date range and market.
+
+## Query parameters
+
+<ParamField query="from" type="string" required>
+  Start date (ISO 8601). Inclusive.
+</ParamField>
+
+<ParamField query="to" type="string" required>
+  End date (ISO 8601). Inclusive.
+</ParamField>
+
+<ParamField query="market" type="string">
+  Filter by ISO 3166-1 alpha-2 country code. Omit for all markets.
+</ParamField>
+
+<ParamField query="group_by" type="string" default="day">
+  Aggregation period: `day`, `week`, `month`.
+</ParamField>
+
+## Example
+
+```bash
+curl "https://api.senderz.ai/v1/operator-analytics?from=2026-07-01&to=2026-07-31&market=AU&group_by=week" \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx"
+```
+
+## Response
+
+<ResponseExample>
+```json 200
+{
+  "ok": true,
+  "data": {
+    "summary": {
+      "total_submitted": 247,
+      "total_approved": 218,
+      "total_rejected": 14,
+      "total_info_requested": 12,
+      "total_pending": 3,
+      "approval_rate": 0.94,
+      "avg_processing_hours": 4.2
+    },
+    "periods": [
+      {
+        "period_start": "2026-07-01",
+        "period_end": "2026-07-07",
+        "submitted": 58,
+        "approved": 52,
+        "rejected": 3,
+        "info_requested": 2,
+        "pending": 1,
+        "approval_rate": 0.95,
+        "avg_processing_hours": 3.8
+      },
+      {
+        "period_start": "2026-07-08",
+        "period_end": "2026-07-14",
+        "submitted": 64,
+        "approved": 59,
+        "rejected": 4,
+        "info_requested": 1,
+        "pending": 0,
+        "approval_rate": 0.94,
+        "avg_processing_hours": 4.1
+      },
+      {
+        "period_start": "2026-07-15",
+        "period_end": "2026-07-21",
+        "submitted": 71,
+        "approved": 60,
+        "rejected": 4,
+        "info_requested": 5,
+        "pending": 2,
+        "approval_rate": 0.94,
+        "avg_processing_hours": 4.5
+      },
+      {
+        "period_start": "2026-07-22",
+        "period_end": "2026-07-28",
+        "submitted": 54,
+        "approved": 47,
+        "rejected": 3,
+        "info_requested": 4,
+        "pending": 0,
+        "approval_rate": 0.94,
+        "avg_processing_hours": 4.3
+      }
+    ],
+    "top_rejection_reasons": [
+      {"reason": "use_case_unclear", "count": 7},
+      {"reason": "brand_mismatch", "count": 4},
+      {"reason": "duplicate_sid", "count": 2},
+      {"reason": "restricted_term", "count": 1}
+    ]
+  },
+  "meta": {
+    "request_id": "req_op006",
+    "timestamp": "2026-07-31T09:00:00+10:00"
+  }
+}
+```
+</ResponseExample>

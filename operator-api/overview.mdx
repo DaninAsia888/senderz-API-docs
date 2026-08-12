@@ -1,0 +1,41 @@
+---
+title: "Overview"
+description: "Review, approve, and reject Sender ID registrations for your network via API."
+---
+
+## Operator API
+
+The Operator API gives mobile network operators (MNOs) programmatic access to manage Sender ID registrations submitted for their network. This is the API equivalent of the [Senderz Operator Console](https://senderz.ai/operators).
+
+Use it to:
+
+- **Review** incoming SID registration requests from brands, aggregators, and CPaaS providers
+- **Approve, reject, or request more information** on registrations with structured reasons
+- **Monitor** registration volumes, approval rates, and processing times across your network
+
+## Who uses this API
+
+MNOs and their integration teams. Each operator receives an API key scoped with `operator:read` and `operator:write` permissions. The key is bound to the operator's network, so all responses are automatically filtered to registrations relevant to that operator.
+
+## Registration lifecycle (operator view)
+
+```
+pending_operator_review → approved → registered (on market register)
+                        └→ info_requested → resubmitted → pending_operator_review
+                        └→ rejected
+```
+
+| Status | Description |
+|---|---|
+| `pending_operator_review` | Registration submitted by a brand or CPaaS provider, awaiting operator decision. |
+| `approved` | Operator has approved the registration. Proceeds to market register submission. |
+| `info_requested` | Operator has requested additional information or evidence. Registration is returned to the submitter for amendment. |
+| `resubmitted` | Submitter has responded to an information request. Returns to `pending_operator_review`. |
+| `rejected` | Operator has rejected the registration. Submitter is notified with the rejection reason. |
+
+## Permissions
+
+| Permission | Description |
+|---|---|
+| `operator:read` | List registrations and view analytics |
+| `operator:write` | Approve, reject, or request more information on registrations |

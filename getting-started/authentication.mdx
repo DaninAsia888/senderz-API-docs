@@ -15,8 +15,8 @@ Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx
 
 | Prefix | Scope |
 |---|---|
-| `sz_live_` | Production. SID submissions go to the register. Messages are delivered. |
-| `sz_test_` | Sandbox. SID submissions are validated but not submitted. Messages are simulated. |
+| `sz_live_` | Production. SID submissions go to the register. Operator approvals are binding. Messages are delivered. |
+| `sz_test_` | Sandbox. SID submissions are validated but not submitted. Operator actions are simulated. Messages are not dispatched. |
 
 ## Permissions
 
@@ -28,11 +28,13 @@ Each API key can hold one or more scoped permissions:
 | `sids:read` | Read SID status and history |
 | `brands:write` | Onboard and manage brand entities |
 | `brands:read` | Read brand entity details |
+| `operator:write` | Approve or reject registrations |
+| `operator:read` | List registrations and view analytics |
 | `messaging:send` | Send messages |
 | `messaging:read` | Read message status and history |
 | `webhooks:manage` | Create, update, and delete webhook subscriptions |
 
-A CPaaS customer would typically hold all permissions. A brand customer using Senderz only for SID registration might hold `sids:read`, `brands:write`, and `brands:read`.
+A CPaaS customer would typically hold `sids:*`, `brands:*`, `messaging:*`, and `webhooks:manage`. An MNO would hold `operator:*` and `webhooks:manage`. A brand customer using Senderz only for SID registration might hold `sids:read`, `brands:write`, and `brands:read`.
 
 ## Example
 

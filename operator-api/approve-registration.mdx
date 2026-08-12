@@ -1,0 +1,55 @@
+---
+title: "Approve registration"
+api: "POST /v1/operator-registrations/{registration_id}/approve"
+description: "Approve a Sender ID registration for your network."
+---
+
+**Required permission:** `operator:write`
+
+Approves a registration that is currently in `pending_operator_review` or `resubmitted` status. Once approved, the registration proceeds to submission on the relevant market register (e.g. ACMA SMS Sender ID Register for AU).
+
+Returns `409 Conflict` if the registration is not in an actionable status.
+
+## Path parameters
+
+<ParamField path="registration_id" type="string" required>
+  The operator registration ID (e.g. `opreg_a1b2c3d4`).
+</ParamField>
+
+## Request body
+
+<ParamField body="notes" type="string">
+  Optional internal notes recorded against the approval. Not visible to the submitting brand or aggregator.
+</ParamField>
+
+## Example
+
+```bash
+curl -X POST https://api.senderz.ai/v1/operator-registrations/opreg_a1b2c3d4/approve \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "notes": "ABR verified, use case consistent with brand profile."
+  }'
+```
+
+## Response
+
+<ResponseExample>
+```json 200
+{
+  "ok": true,
+  "data": {
+    "id": "opreg_a1b2c3d4",
+    "sender_id": "TrackFast",
+    "status": "approved",
+    "approved_at": "2026-07-17T15:10:00+10:00",
+    "approved_by": "operator_api_key"
+  },
+  "meta": {
+    "request_id": "req_op003",
+    "timestamp": "2026-07-17T15:10:00+10:00"
+  }
+}
+```
+</ResponseExample>

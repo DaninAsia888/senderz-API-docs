@@ -1,0 +1,76 @@
+---
+title: "Get registration"
+api: "GET /v1/operator-registrations/{registration_id}"
+description: "Retrieve full details of a specific Sender ID registration including brand verification, LOA status, and decision history."
+---
+
+**Required permission:** `operator:read`
+
+Returns the complete registration record including brand details, use case, verification results, LOA status, and any prior decisions.
+
+## Path parameters
+
+<ParamField path="registration_id" type="string" required>
+  The operator registration ID (e.g. `opreg_a1b2c3d4`).
+</ParamField>
+
+## Example
+
+```bash
+curl https://api.senderz.ai/v1/operator-registrations/opreg_a1b2c3d4 \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx"
+```
+
+## Response
+
+<ResponseExample>
+```json 200
+{
+  "ok": true,
+  "data": {
+    "id": "opreg_a1b2c3d4",
+    "sender_id": "TrackFast",
+    "brand": {
+      "id": "brand_f6g7h8i9",
+      "name": "TrackFast Logistics Pty Ltd",
+      "identifier_type": "ABN",
+      "identifier_value": "12345678901",
+      "website": "https://trackfast.com.au",
+      "verification_status": "verified"
+    },
+    "market": "AU",
+    "status": "pending_operator_review",
+    "use_case": "Dispatch and delivery notifications for e-commerce orders.",
+    "match_type": "business_name",
+    "match_value": "TrackFast Logistics Pty Ltd",
+    "submitted_by": {
+      "type": "aggregator",
+      "name": "Example CPaaS Provider",
+      "id": "org_x1y2z3"
+    },
+    "loa": {
+      "status": "received",
+      "received_at": "2026-07-16T09:00:00+10:00"
+    },
+    "verification": {
+      "abr_match": true,
+      "name_match_score": 0.97,
+      "domain_match": true
+    },
+    "history": [
+      {
+        "action": "submitted",
+        "at": "2026-07-17T14:30:00+10:00",
+        "by": "org_x1y2z3"
+      }
+    ],
+    "submitted_at": "2026-07-17T14:30:00+10:00",
+    "created_at": "2026-07-17T14:30:00+10:00"
+  },
+  "meta": {
+    "request_id": "req_op002",
+    "timestamp": "2026-07-17T15:01:00+10:00"
+  }
+}
+```
+</ResponseExample>

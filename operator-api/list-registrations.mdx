@@ -1,0 +1,115 @@
+---
+title: "List registrations"
+api: "GET /v1/operator-registrations"
+description: "List Sender ID registrations submitted for your network."
+---
+
+**Required permission:** `operator:read`
+
+Returns registrations filtered to the operator's network. Results are sorted by submission date (newest first).
+
+## Query parameters
+
+<ParamField query="status" type="string">
+  Filter by status: `pending_operator_review`, `approved`, `info_requested`, `resubmitted`, `rejected`.
+</ParamField>
+
+<ParamField query="market" type="string">
+  Filter by ISO 3166-1 alpha-2 country code.
+</ParamField>
+
+<ParamField query="sender_id" type="string">
+  Filter by Sender ID string (partial match).
+</ParamField>
+
+<ParamField query="brand_name" type="string">
+  Filter by brand entity name (partial match).
+</ParamField>
+
+<ParamField query="submitted_by_type" type="string">
+  Filter by submitter type: `brand`, `aggregator`, `cpaas`.
+</ParamField>
+
+<ParamField query="submitted_after" type="string">
+  ISO 8601 date. Only return registrations submitted after this date.
+</ParamField>
+
+<ParamField query="submitted_before" type="string">
+  ISO 8601 date. Only return registrations submitted before this date.
+</ParamField>
+
+<ParamField query="cursor" type="string">
+  Pagination cursor.
+</ParamField>
+
+<ParamField query="page_size" type="integer" default="50">
+  Results per page. Maximum 100.
+</ParamField>
+
+## Example
+
+```bash
+curl "https://api.senderz.ai/v1/operator-registrations?status=pending_operator_review&market=AU" \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx"
+```
+
+## Response
+
+<ResponseExample>
+```json 200
+{
+  "ok": true,
+  "data": [
+    {
+      "id": "opreg_a1b2c3d4",
+      "sender_id": "TrackFast",
+      "brand": {
+        "id": "brand_f6g7h8i9",
+        "name": "TrackFast Logistics Pty Ltd",
+        "identifier_type": "ABN",
+        "identifier_value": "12345678901"
+      },
+      "market": "AU",
+      "status": "pending_operator_review",
+      "use_case": "Dispatch and delivery notifications for e-commerce orders.",
+      "match_type": "business_name",
+      "match_value": "TrackFast Logistics Pty Ltd",
+      "submitted_by": {
+        "type": "aggregator",
+        "name": "Example CPaaS Provider"
+      },
+      "submitted_at": "2026-07-17T14:30:00+10:00"
+    },
+    {
+      "id": "opreg_e5f6g7h8",
+      "sender_id": "SecurBank",
+      "brand": {
+        "id": "brand_j1k2l3m4",
+        "name": "SecurBank Australia Ltd",
+        "identifier_type": "ABN",
+        "identifier_value": "98765432100"
+      },
+      "market": "AU",
+      "status": "pending_operator_review",
+      "use_case": "Two-factor authentication and transaction verification codes.",
+      "match_type": "company_name",
+      "match_value": "SecurBank Australia Ltd",
+      "submitted_by": {
+        "type": "brand",
+        "name": "SecurBank Australia Ltd"
+      },
+      "submitted_at": "2026-07-17T10:15:00+10:00"
+    }
+  ],
+  "pagination": {
+    "has_more": false,
+    "next_cursor": null,
+    "page_size": 50
+  },
+  "meta": {
+    "request_id": "req_op001",
+    "timestamp": "2026-07-17T15:00:00+10:00"
+  }
+}
+```
+</ResponseExample>
