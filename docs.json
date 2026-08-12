@@ -94,6 +94,29 @@
         ]
       },
       {
+        "tab": "Operator API",
+        "icon": "tower-broadcast",
+        "groups": [
+          {
+            "group": "Registrations",
+            "pages": [
+              "operator-api/overview",
+              "operator-api/list-registrations",
+              "operator-api/get-registration",
+              "operator-api/approve-registration",
+              "operator-api/reject-registration",
+              "operator-api/request-info"
+            ]
+          },
+          {
+            "group": "Insights",
+            "pages": [
+              "operator-api/analytics"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Messaging API",
         "icon": "message",
         "groups": [
