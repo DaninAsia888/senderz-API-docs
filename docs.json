@@ -185,5 +185,8 @@
   "feedback": {
     "thumbsRating": true
   },
-  "description": "Senderz API: register and manage SMS Sender IDs across 60+ global markets, and send compliant A2P business messages. Built for CPaaS providers, aggregators, and enterprise brands."
+  "description": "Senderz API: register and manage SMS Sender IDs across 60+ global markets, and send compliant A2P business messages. Built for CPaaS providers, aggregators, and enterprise brands.",
+  "appearance": {
+    "default": "dark"
+  }
 }
