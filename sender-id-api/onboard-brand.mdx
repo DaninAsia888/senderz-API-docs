@@ -6,6 +6,10 @@ description: "Submit a new brand entity for verification."
 
 **Required permission:** `brands:write`
 
+<Note>
+A new brand is linked to your account with a `pending` relationship. It is not readable or writable by your key (`GET`, `PATCH`, or as `brand_id` on `POST /v1/sids`) until the Brand Owner approves that relationship. A Brand Owner key never reads or writes under its provider's account.
+</Note>
+
 ## Request body
 
 <ParamField body="name" type="string" required>
@@ -36,7 +40,7 @@ description: "Submit a new brand entity for verification."
 
 ```bash
 curl -X POST https://api.senderz.ai/v1/brands \
-  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxx" \
+  -H "Authorization: Bearer sk_live_xxxxxxxxxxxxx" \
   -H "Content-Type: application/json" \
   -d '{
     "name": "TrackFast Logistics Pty Ltd",

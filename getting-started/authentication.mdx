@@ -8,15 +8,15 @@ description: "Authenticate API requests using Bearer tokens with scoped permissi
 All requests require an API key in the `Authorization` header:
 
 ```
-Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx
+Authorization: Bearer sk_live_xxxxxxxxxxxxxxxxxxxxx
 ```
 
 ## Key types
 
 | Prefix | Scope |
 |---|---|
-| `sz_live_` | Production. SID submissions go to the register. Operator approvals are binding. Messages are delivered. |
-| `sz_test_` | Sandbox. SID submissions are validated but not submitted. Operator actions are simulated. Messages are not dispatched. |
+| `sk_live_` | Production. SID submissions go to the register. Operator approvals are binding. Messages are delivered. |
+| `sk_test_` | Sandbox. SID submissions are validated but not submitted. Operator actions are simulated. Messages are not dispatched. |
 
 ## Permissions
 
@@ -42,13 +42,13 @@ A CPaaS customer would typically hold `sids:*`, `brands:*`, `messaging:*`, and `
 
 ```bash cURL
 curl https://api.senderz.ai/v1/sids \
-  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"
+  -H "Authorization: Bearer sk_live_xxxxxxxxxxxxxxxxxxxxx"
 ```
 
 ```python Python
 import requests
 
-headers = {"Authorization": "Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"}
+headers = {"Authorization": "Bearer sk_live_xxxxxxxxxxxxxxxxxxxxx"}
 response = requests.get(
     "https://api.senderz.ai/v1/sids",
     headers=headers
@@ -58,7 +58,7 @@ response = requests.get(
 ```javascript Node.js
 const response = await fetch("https://api.senderz.ai/v1/sids", {
   headers: {
-    "Authorization": "Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"
+    "Authorization": "Bearer sk_live_xxxxxxxxxxxxxxxxxxxxx"
   }
 });
 ```

@@ -12,7 +12,7 @@ List the associate authorisations belonging to your account, newest first, with 
 ## Query parameters
 
 <ParamField query="state" type="string">
-  Filter by state: `awaiting_owner_confirmation`, `awaiting_sid_verification`, `authorised`, `pending_acma`, `active`, `declined`.
+  Filter by state: `awaiting_owner_confirmation`, `awaiting_sid_verification`, `authorised`, `pending_authority`, `active`, `declined`. Any other value returns `400`.
 </ParamField>
 
 <ParamField query="country" type="string">
@@ -31,8 +31,8 @@ List the associate authorisations belonging to your account, newest first, with 
   Pagination cursor from a previous response's `pagination.next_cursor`.
 </ParamField>
 
-<ParamField query="limit" type="integer">
-  Page size (default 25, max 100).
+<ParamField query="page_size" type="integer">
+  Page size (default 50, max 100).
 </ParamField>
 
 ## Example
@@ -40,8 +40,8 @@ List the associate authorisations belonging to your account, newest first, with 
 <CodeGroup>
 
 ```bash cURL
-curl "https://api.senderz.ai/v1/associate-authorisations?state=pending_acma&country=AU" \
-  -H "Authorization: Bearer sz_live_xxxxxxxxxxxx"
+curl "https://api.senderz.ai/v1/associate-authorisations?state=pending_authority&country=AU" \
+  -H "Authorization: Bearer sk_live_xxxxxxxxxxxx"
 ```
 
 </CodeGroup>
@@ -52,7 +52,8 @@ curl "https://api.senderz.ai/v1/associate-authorisations?state=pending_acma&coun
   "data": [
     {
       "id": "aa_a1b2c3",
-      "state": "pending_acma",
+      "state": "pending_authority",
+      "authority": "ACMA",
       "country": "AU",
       "claimed_sender_id": "CHIC",
       "owner_entity_name": "CHIC MANAGEMENT PTY LIMITED",
@@ -60,7 +61,7 @@ curl "https://api.senderz.ai/v1/associate-authorisations?state=pending_acma&coun
       "owner_confirmed_at": "2026-09-19T13:15:00+10:00"
     }
   ],
-  "pagination": { "has_more": false, "next_cursor": null },
+  "pagination": { "has_more": false, "next_cursor": null, "page_size": 50 },
   "meta": {
     "request_id": "req_list123",
     "timestamp": "2026-09-19T14:30:00+10:00"

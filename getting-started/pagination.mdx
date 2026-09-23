@@ -32,14 +32,14 @@ Fetch the first page:
 
 ```bash
 curl "https://api.senderz.ai/v1/messaging/messages?page_size=25" \
-  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"
+  -H "Authorization: Bearer sk_live_xxxxxxxxxxxxxxxxxxxxx"
 ```
 
 Fetch the next page using the returned cursor:
 
 ```bash
 curl "https://api.senderz.ai/v1/messaging/messages?page_size=25&cursor=cur_xyz789" \
-  -H "Authorization: Bearer sz_live_xxxxxxxxxxxxxxxxxxxxx"
+  -H "Authorization: Bearer sk_live_xxxxxxxxxxxxxxxxxxxxx"
 ```
 
 When `pagination.has_more` is `false`, you have reached the last page.

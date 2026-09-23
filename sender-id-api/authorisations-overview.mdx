@@ -9,9 +9,9 @@ The Associate Authorisations endpoints let a partner request these authorisation
 
 ## The flow
 
-1. **Request** — `POST /v1/associate-authorisations` with one or more clients, each with the Sender IDs you seek to send under. Each `(client, sender_id)` pair creates one authorisation in state `awaiting_owner_confirmation` and emails the owner's representative a secure link.
-2. **Owner acts** — the Brand Owner confirms or declines via their emailed link. This step is owner-only and is not exposed over the API: an associate can never approve the consent it is requesting.
-3. **Track** — poll `GET /v1/associate-authorisations` (and the detail endpoint) to see each authorisation advance through `authorised` → `pending_acma` → `active`, or `declined`.
+1. **Request:** `POST /v1/associate-authorisations` with one or more clients, each with the Sender IDs you seek to send under. Each `(client, sender_id)` pair creates one authorisation in state `awaiting_owner_confirmation` and emails the owner's representative a secure link. Your organisation must be an approved scheme participant for the country before any request is created.
+2. **Owner acts:** the Brand Owner confirms or declines via their emailed link. This step is owner-only and is not exposed over the API: an associate can never approve the consent it is requesting.
+3. **Track:** poll `GET /v1/associate-authorisations` (and the detail endpoint) to see each authorisation advance through `authorised` → `pending_authority` → `active`, or `declined`.
 
 <Note>
 Owner confirm and decline are deliberately not available over the API. The Brand Owner's authorisation must come from the owner, through their own secure link. This protects the integrity of the consent the associate is seeking.

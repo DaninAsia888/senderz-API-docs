@@ -3,13 +3,27 @@ title: "Request authorisations"
 description: "Batch-request Brand Owner authorisations to send under existing Sender IDs."
 ---
 
-Request authorisation from one or more Brand Owners to send under their existing registered Sender IDs. A single call can span multiple clients, each with multiple Sender IDs. Each `(client, sender_id)` pair becomes one authorisation and emails the owner's representative a secure one-time link.
+Request authorisation from one or more Brand Owners to send under their existing registered Sender IDs. A single call can span multiple clients, each with multiple Sender IDs. Each `(client, sender_id)` pair becomes one authorisation and emails the owner's representative a secure one-time link. The link is sent only to the owner by email and is never returned in the API response.
 
 Processing is **best-effort per pair**: one invalid Sender ID does not sink the batch. Each pair returns its own status.
 
 <api method="POST" url="https://api.senderz.ai/v1/associate-authorisations" />
 
 **Required permission:** `authorisations:write`
+
+## Before anything is created
+
+Your organisation must be an approved participant in the country's SMS Sender ID scheme register. This is the same check the Senderz webform applies before Entity Associate intake. If the check does not pass, the request creates nothing and sends no email.
+
+| Status | Code | Meaning |
+|---|---|---|
+| `403` | `scheme_participation_required` | Your organisation is not an approved scheme participant. |
+| `503` | `scheme_register_stale` | Participation cannot be confirmed because the register copy is out of date. Retry later. |
+| `502` | `scheme_check_failed` | The participation check could not run. Retry later. |
+| `422` | `market_not_supported` | Entity Associate authorisation is only available where a live authority register exists (AU today). |
+| `403` | `insufficient_scope` | The key lacks `authorisations:write`. |
+
+Use [Scheme participation check](/sender-id-api/scheme-check) to confirm your status in advance.
 
 ## Request body
 
@@ -23,22 +37,26 @@ Processing is **best-effort per pair**: one invalid Sender ID does not sink the 
     <ParamField body="owner_entity_name" type="string" required>
       The Brand Owner's registered legal entity name.
     </ParamField>
-    <ParamField body="owner_entity_abn" type="string" required>
-      The Brand Owner's registration number (e.g. ABN).
+    <ParamField body="owner_entity_abn" type="string">
+      The Brand Owner's registration number (e.g. ABN). Recommended.
     </ParamField>
-    <ParamField body="owner_rep_name" type="string" required>
+    <ParamField body="owner_rep_name" type="string">
       Name of the owner's authorised representative.
     </ParamField>
     <ParamField body="owner_rep_email" type="string" required>
       Email of the representative. Each Sender ID sends this person a secure one-time link.
     </ParamField>
     <ParamField body="sender_ids" type="array" required>
-      The owner's existing Sender IDs you seek authorisation to send under.
+      The owner's existing Sender IDs you seek authorisation to send under. Up to 25 per client; up to 50 clients per batch.
     </ParamField>
   </Expandable>
 </ParamField>
 
 ## Response
+
+Returns `201` when at least one authorisation was created, or `207` when every pair failed.
+
+<ResponseField name="session_id" type="string">Batch identifier for this request.</ResponseField>
 
 <ResponseField name="authorisations" type="array">
   One entry per `(client, sender_id)` pair.
@@ -50,8 +68,10 @@ Processing is **best-effort per pair**: one invalid Sender ID does not sink the 
     <ResponseField name="owner_entity_abn" type="string" />
     <ResponseField name="claimed_sender_id" type="string" />
     <ResponseField name="owner_rep_email" type="string" />
+    <ResponseField name="country" type="string" />
+    <ResponseField name="authority" type="string">The country's registration authority (`ACMA` for AU).</ResponseField>
     <ResponseField name="state" type="string">`awaiting_owner_confirmation` on creation.</ResponseField>
-    <ResponseField name="magic_link_url" type="string">The owner's one-time authorisation link.</ResponseField>
+    <ResponseField name="email_sent" type="boolean">Whether the owner's authorisation email was sent.</ResponseField>
     <ResponseField name="error" type="string">Present when `status` is `failed`.</ResponseField>
   </Expandable>
 </ResponseField>
@@ -66,7 +86,7 @@ Processing is **best-effort per pair**: one invalid Sender ID does not sink the 
 
 ```bash cURL
 curl -X POST https://api.senderz.ai/v1/associate-authorisations \
-  -H "Authorization: Bearer sz_live_xxxxxxxxxxxx" \
+  -H "Authorization: Bearer sk_live_xxxxxxxxxxxx" \
   -H "Content-Type: application/json" \
   -d '{
     "country": "AU",
@@ -91,10 +111,11 @@ curl -X POST https://api.senderz.ai/v1/associate-authorisations \
 
 </CodeGroup>
 
-```json 200
+```json 201
 {
   "ok": true,
   "data": {
+    "session_id": "3f2a9c1e-7b4d-4e8a-9f10-2c5d8e6a1b40",
     "authorisations": [
       {
         "status": "created",
@@ -104,8 +125,10 @@ curl -X POST https://api.senderz.ai/v1/associate-authorisations \
         "owner_entity_abn": "80104930743",
         "claimed_sender_id": "CHIC",
         "owner_rep_email": "paul@example.com",
+        "country": "AU",
+        "authority": "ACMA",
         "state": "awaiting_owner_confirmation",
-        "magic_link_url": "https://senderz.ai/bo/authorise/..."
+        "email_sent": true
       }
     ],
     "summary": { "clients": 2, "requested": 3, "created": 3, "failed": 0 }
@@ -116,3 +139,7 @@ curl -X POST https://api.senderz.ai/v1/associate-authorisations \
   }
 }
 ```
+
+<Note>
+Sandbox keys validate the request and return simulated results without running the participation check or sending email. Sandbox responses include a placeholder link for integration testing only; live responses never include one.
+</Note>

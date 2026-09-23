@@ -7,8 +7,8 @@ Run the same Registrar Intelligence Lookup (RIL) the Senderz registration flow r
 
 RIL reads two layers, both scoped to the requested country:
 
-1. **Senderz-held registrations** — always available in every market, from the moment Senderz holds data for that country.
-2. **Official country register** — read additively where a live regulatory integration exists for the market (e.g. the ACMA SMS Sender ID Register for AU, once integrated). Markets without a live integration return the Senderz layer only, never a fabricated official-register result.
+1. **Senderz-held registrations:** always available in every market, from the moment Senderz holds data for that country.
+2. **Official country register:** read additively where a live regulatory integration exists for the market (e.g. the ACMA SMS Sender ID Register for AU, once integrated). Markets without a live integration return the Senderz layer only, never a fabricated official-register result.
 
 <api method="POST" url="https://api.senderz.ai/v1/ril" />
 
@@ -34,6 +34,10 @@ RIL reads two layers, both scoped to the requested country:
 
 ## Response
 
+<ResponseField name="authority" type="string">
+  The country's registration authority (`ACMA` for AU), or `null` where none is live.
+</ResponseField>
+
 <ResponseField name="sid_match" type="object">
   The Sender ID registration match result.
   <Expandable title="properties">
@@ -57,7 +61,7 @@ RIL reads two layers, both scoped to the requested country:
       Relationship type where one exists (e.g. `entity_associate`).
     </ResponseField>
     <ResponseField name="status" type="string">
-      Relationship status (e.g. `active`, `pending_acma`).
+      Relationship status (e.g. `active`, `pending_authority`).
     </ResponseField>
     <ResponseField name="message" type="string" />
   </Expandable>
@@ -69,7 +73,7 @@ RIL reads two layers, both scoped to the requested country:
 
 ```bash cURL
 curl -X POST https://api.senderz.ai/v1/ril \
-  -H "Authorization: Bearer sz_live_xxxxxxxxxxxx" \
+  -H "Authorization: Bearer sk_live_xxxxxxxxxxxx" \
   -H "Content-Type: application/json" \
   -d '{
     "sender_id": "CHOKKY",
@@ -87,6 +91,7 @@ curl -X POST https://api.senderz.ai/v1/ril \
   "data": {
     "sender_id": "CHOKKY",
     "country": "AU",
+    "authority": "ACMA",
     "sid_match": {
       "matched": true,
       "sources": [

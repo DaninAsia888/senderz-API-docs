@@ -33,12 +33,12 @@ https://api.senderz.ai
 
 <Steps>
   <Step title="Get your API key">
-    Sign in to the [Senderz dashboard](https://senderz.ai) and generate an API key. Use `sz_test_` keys for sandbox testing, `sz_live_` keys for production.
+    Sign in to the [Senderz dashboard](https://senderz.ai) and generate an API key. Use `sk_test_` keys for sandbox testing, `sk_live_` keys for production.
   </Step>
   <Step title="Onboard a brand">
     ```bash
     curl -X POST https://api.senderz.ai/v1/brands \
-      -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
+      -H "Authorization: Bearer sk_test_xxxxxxxxxxxxx" \
       -H "Content-Type: application/json" \
       -d '{
         "name": "TrackFast Logistics Pty Ltd",
@@ -56,7 +56,7 @@ https://api.senderz.ai
   <Step title="Register a Sender ID">
     ```bash
     curl -X POST https://api.senderz.ai/v1/sids \
-      -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
+      -H "Authorization: Bearer sk_test_xxxxxxxxxxxxx" \
       -H "Content-Type: application/json" \
       -d '{
         "sender_id": "TrackFast",
@@ -71,7 +71,7 @@ https://api.senderz.ai
   <Step title="Send a message">
     ```bash
     curl -X POST https://api.senderz.ai/v1/messaging/messages \
-      -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
+      -H "Authorization: Bearer sk_test_xxxxxxxxxxxxx" \
       -H "Content-Type: application/json" \
       -d '{
         "to": "+61400123456",

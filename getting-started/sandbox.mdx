@@ -5,7 +5,7 @@ description: "Test your integration without submitting SID registrations or send
 
 ## Overview
 
-All endpoints are available in sandbox mode using `sz_test_` API keys. Sandbox mirrors production behaviour with simulated external systems.
+All endpoints are available in sandbox mode using `sk_test_` API keys. Sandbox mirrors production behaviour with simulated external systems.
 
 ## Sender ID sandbox
 
@@ -15,7 +15,7 @@ All endpoints are available in sandbox mode using `sz_test_` API keys. Sandbox m
 
 ```bash
 curl -X POST https://api.senderz.ai/v1/sids \
-  -H "Authorization: Bearer sz_test_xxxxxxxxxxxxx" \
+  -H "Authorization: Bearer sk_test_xxxxxxxxxxxxx" \
   -H "Content-Type: application/json" \
   -d '{
     "sender_id": "TestBrand",
