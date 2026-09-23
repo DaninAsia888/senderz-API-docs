@@ -1,0 +1,114 @@
+---
+title: "Registrar Intelligence Lookup"
+description: "Check whether a Sender ID is already registered and its relationship to an account, across any market."
+---
+
+Run the same Registrar Intelligence Lookup (RIL) the Senderz registration flow runs: given a Sender ID and a market, determine whether that Sender ID is already registered and, optionally, whether it has an existing relationship to a specified entity.
+
+RIL reads two layers, both scoped to the requested country:
+
+1. **Senderz-held registrations** — always available in every market, from the moment Senderz holds data for that country.
+2. **Official country register** — read additively where a live regulatory integration exists for the market (e.g. the ACMA SMS Sender ID Register for AU, once integrated). Markets without a live integration return the Senderz layer only, never a fabricated official-register result.
+
+<api method="POST" url="https://api.senderz.ai/v1/ril" />
+
+**Required permission:** `sids:read`
+
+## Request body
+
+<ParamField body="sender_id" type="string" required>
+  The Sender ID to look up (e.g. `CHOKKY`).
+</ParamField>
+
+<ParamField body="country" type="string" required>
+  Market to look up against. ISO 3166-1 alpha-2 (e.g. `AU`, `ES`, `WS`).
+</ParamField>
+
+<ParamField body="registration_number" type="string">
+  Optional. The registration number of the entity to test an existing relationship against (e.g. an ABN). Omit to run the Sender ID match only.
+</ParamField>
+
+<ParamField body="registration_type" type="string">
+  Optional. One of `ABN`, `BRN`, `CRN`, `Company`, or another market-specific identifier type. Required if `registration_number` is supplied.
+</ParamField>
+
+## Response
+
+<ResponseField name="sid_match" type="object">
+  The Sender ID registration match result.
+  <Expandable title="properties">
+    <ResponseField name="matched" type="boolean">
+      `true` if any live source matched the Sender ID for this country.
+    </ResponseField>
+    <ResponseField name="sources" type="array">
+      Per-layer results. Each entry has `source` (e.g. `senderz:AU`, `acma_scheme_register`), `matched` (boolean) and `state` (`live` | `stubbed` | `none`).
+    </ResponseField>
+    <ResponseField name="message" type="string">
+      Human-readable outcome, naming the country (e.g. `SID matched via Senderz AU register`).
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="relationship" type="object">
+  The relationship result, present when `registration_number` was supplied.
+  <Expandable title="properties">
+    <ResponseField name="exists" type="boolean" />
+    <ResponseField name="type" type="string">
+      Relationship type where one exists (e.g. `entity_associate`).
+    </ResponseField>
+    <ResponseField name="status" type="string">
+      Relationship status (e.g. `active`, `pending_acma`).
+    </ResponseField>
+    <ResponseField name="message" type="string" />
+  </Expandable>
+</ResponseField>
+
+## Example
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.senderz.ai/v1/ril \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sender_id": "CHOKKY",
+    "country": "AU",
+    "registration_number": "80104930743",
+    "registration_type": "ABN"
+  }'
+```
+
+</CodeGroup>
+
+```json 200
+{
+  "ok": true,
+  "data": {
+    "sender_id": "CHOKKY",
+    "country": "AU",
+    "sid_match": {
+      "matched": true,
+      "sources": [
+        { "source": "senderz:AU", "matched": true, "state": "live" },
+        { "source": "acma_scheme_register", "matched": false, "state": "stubbed" }
+      ],
+      "message": "SID matched via Senderz AU register"
+    },
+    "relationship": {
+      "exists": true,
+      "type": "entity_associate",
+      "status": "active",
+      "message": "Relationship type entity_associate, status active"
+    }
+  },
+  "meta": {
+    "request_id": "req_ril123",
+    "timestamp": "2026-09-19T14:30:00+10:00"
+  }
+}
+```
+
+<Note>
+In a market with no live official-register integration, `sources` contains only the Senderz layer (e.g. `senderz:WS`) and the message reads `SID matched via Senderz WS register` or `No current SID match in Senderz WS register`. An official-register result is never fabricated for a market that is not integrated.
+</Note>

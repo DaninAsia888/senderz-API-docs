@@ -90,6 +90,17 @@
               "sender-id-api/list-sids",
               "sender-id-api/deregister-sid"
             ]
+          },
+          {
+            "group": "Registrar Intelligence & Authorisation",
+            "pages": [
+              "sender-id-api/ril-lookup",
+              "sender-id-api/scheme-check",
+              "sender-id-api/authorisations-overview",
+              "sender-id-api/request-authorisations",
+              "sender-id-api/list-authorisations",
+              "sender-id-api/get-authorisation"
+            ]
           }
         ]
       },

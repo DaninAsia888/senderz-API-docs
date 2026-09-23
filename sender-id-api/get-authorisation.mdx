@@ -1,0 +1,80 @@
+---
+title: "Get authorisation"
+description: "Retrieve a single associate authorisation by ID."
+---
+
+Retrieve one associate authorisation belonging to your account.
+
+<api method="GET" url="https://api.senderz.ai/v1/associate-authorisations/{id}" />
+
+**Required permission:** `authorisations:read`
+
+## Path parameters
+
+<ParamField path="id" type="string" required>
+  The authorisation ID (e.g. `aa_a1b2c3`).
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string" />
+<ResponseField name="state" type="string">
+  `awaiting_owner_confirmation`, `awaiting_sid_verification`, `authorised`, `pending_acma`, `active`, or `declined`.
+</ResponseField>
+<ResponseField name="country" type="string" />
+<ResponseField name="claimed_sender_id" type="string" />
+<ResponseField name="owner_entity_name" type="string" />
+<ResponseField name="owner_entity_abn" type="string" />
+<ResponseField name="owner_rep_name" type="string" />
+<ResponseField name="owner_rep_email" type="string" />
+<ResponseField name="owner_confirmed_sid_is_acma_verified" type="boolean">
+  Whether the owner attested that the Sender ID is already verified under the market's scheme.
+</ResponseField>
+<ResponseField name="owner_confirmed_at" type="string" />
+<ResponseField name="declined_at" type="string" />
+<ResponseField name="decline_reason" type="string" />
+<ResponseField name="pending_acma_at" type="string" />
+<ResponseField name="active_at" type="string" />
+<ResponseField name="acma_association_reference" type="string" />
+<ResponseField name="created_at" type="string" />
+<ResponseField name="updated_at" type="string" />
+
+## Example
+
+<CodeGroup>
+
+```bash cURL
+curl "https://api.senderz.ai/v1/associate-authorisations/aa_a1b2c3" \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxx"
+```
+
+</CodeGroup>
+
+```json 200
+{
+  "ok": true,
+  "data": {
+    "id": "aa_a1b2c3",
+    "state": "pending_acma",
+    "country": "AU",
+    "claimed_sender_id": "CHIC",
+    "owner_entity_name": "CHIC MANAGEMENT PTY LIMITED",
+    "owner_entity_abn": "80104930743",
+    "owner_rep_name": "Paul",
+    "owner_rep_email": "paul@example.com",
+    "owner_confirmed_sid_is_acma_verified": true,
+    "owner_confirmed_at": "2026-09-19T13:15:00+10:00",
+    "pending_acma_at": "2026-09-19T13:15:00+10:00",
+    "created_at": "2026-09-19T12:00:00+10:00",
+    "updated_at": "2026-09-19T13:15:00+10:00"
+  },
+  "meta": {
+    "request_id": "req_get123",
+    "timestamp": "2026-09-19T14:30:00+10:00"
+  }
+}
+```
+
+<Note>
+A `404` is returned for any authorisation outside your account.
+</Note>

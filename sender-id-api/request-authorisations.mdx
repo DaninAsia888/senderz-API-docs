@@ -1,0 +1,118 @@
+---
+title: "Request authorisations"
+description: "Batch-request Brand Owner authorisations to send under existing Sender IDs."
+---
+
+Request authorisation from one or more Brand Owners to send under their existing registered Sender IDs. A single call can span multiple clients, each with multiple Sender IDs. Each `(client, sender_id)` pair becomes one authorisation and emails the owner's representative a secure one-time link.
+
+Processing is **best-effort per pair**: one invalid Sender ID does not sink the batch. Each pair returns its own status.
+
+<api method="POST" url="https://api.senderz.ai/v1/associate-authorisations" />
+
+**Required permission:** `authorisations:write`
+
+## Request body
+
+<ParamField body="country" type="string" required>
+  Market for all authorisations in this batch. ISO 3166-1 alpha-2 (e.g. `AU`).
+</ParamField>
+
+<ParamField body="clients" type="array" required>
+  One or more Brand Owner clients.
+  <Expandable title="client properties">
+    <ParamField body="owner_entity_name" type="string" required>
+      The Brand Owner's registered legal entity name.
+    </ParamField>
+    <ParamField body="owner_entity_abn" type="string" required>
+      The Brand Owner's registration number (e.g. ABN).
+    </ParamField>
+    <ParamField body="owner_rep_name" type="string" required>
+      Name of the owner's authorised representative.
+    </ParamField>
+    <ParamField body="owner_rep_email" type="string" required>
+      Email of the representative. Each Sender ID sends this person a secure one-time link.
+    </ParamField>
+    <ParamField body="sender_ids" type="array" required>
+      The owner's existing Sender IDs you seek authorisation to send under.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response
+
+<ResponseField name="authorisations" type="array">
+  One entry per `(client, sender_id)` pair.
+  <Expandable title="properties">
+    <ResponseField name="status" type="string">`created` or `failed`.</ResponseField>
+    <ResponseField name="id" type="string">Authorisation ID (when created).</ResponseField>
+    <ResponseField name="touchpoint_id" type="string" />
+    <ResponseField name="owner_entity_name" type="string" />
+    <ResponseField name="owner_entity_abn" type="string" />
+    <ResponseField name="claimed_sender_id" type="string" />
+    <ResponseField name="owner_rep_email" type="string" />
+    <ResponseField name="state" type="string">`awaiting_owner_confirmation` on creation.</ResponseField>
+    <ResponseField name="magic_link_url" type="string">The owner's one-time authorisation link.</ResponseField>
+    <ResponseField name="error" type="string">Present when `status` is `failed`.</ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="summary" type="object">
+  Counts: `clients`, `requested`, `created`, `failed`.
+</ResponseField>
+
+## Example
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.senderz.ai/v1/associate-authorisations \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "country": "AU",
+    "clients": [
+      {
+        "owner_entity_name": "CHIC MANAGEMENT PTY LIMITED",
+        "owner_entity_abn": "80104930743",
+        "owner_rep_name": "Paul",
+        "owner_rep_email": "paul@example.com",
+        "sender_ids": ["CHIC", "Scoop"]
+      },
+      {
+        "owner_entity_name": "HELLOWORLD TRAVEL LIMITED",
+        "owner_entity_abn": "60091214998",
+        "owner_rep_name": "Geoff",
+        "owner_rep_email": "geoff@example.com",
+        "sender_ids": ["Hello"]
+      }
+    ]
+  }'
+```
+
+</CodeGroup>
+
+```json 200
+{
+  "ok": true,
+  "data": {
+    "authorisations": [
+      {
+        "status": "created",
+        "id": "aa_a1b2c3",
+        "touchpoint_id": "tp_a1b2c3",
+        "owner_entity_name": "CHIC MANAGEMENT PTY LIMITED",
+        "owner_entity_abn": "80104930743",
+        "claimed_sender_id": "CHIC",
+        "owner_rep_email": "paul@example.com",
+        "state": "awaiting_owner_confirmation",
+        "magic_link_url": "https://senderz.ai/bo/authorise/..."
+      }
+    ],
+    "summary": { "clients": 2, "requested": 3, "created": 3, "failed": 0 }
+  },
+  "meta": {
+    "request_id": "req_auth123",
+    "timestamp": "2026-09-19T14:30:00+10:00"
+  }
+}
+```

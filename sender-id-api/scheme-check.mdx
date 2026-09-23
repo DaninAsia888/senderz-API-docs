@@ -1,0 +1,93 @@
+---
+title: "Scheme Participation Check"
+description: "Check whether an entity is an approved participant in a market's Sender ID scheme."
+---
+
+Determine whether an entity is an approved participant in the relevant market's SMS Sender ID scheme, keyed on its registration number. In Australia this checks the entity against the ACMA scheme-approved provider register.
+
+The check is country-driven. A market with no live scheme register returns `scheme_register_unavailable` and never returns `participating` from a source that is not live.
+
+<api method="POST" url="https://api.senderz.ai/v1/scheme-check" />
+
+**Required permission:** `sids:read`
+
+## Request body
+
+<ParamField body="registration_number" type="string" required>
+  The entity's registration number (e.g. an ABN such as `80104930743`).
+</ParamField>
+
+<ParamField body="registration_type" type="string">
+  Optional. Identifier type, e.g. `ABN`, `BRN`, `CRN`, `Company`.
+</ParamField>
+
+<ParamField body="country" type="string" required>
+  Market to check. ISO 3166-1 alpha-2 (e.g. `AU`).
+</ParamField>
+
+## Response
+
+<ResponseField name="outcome" type="string">
+  One of:
+  <Expandable title="values">
+    <ResponseField name="participating">
+      The entity is an approved scheme participant.
+    </ResponseField>
+    <ResponseField name="not_participating">
+      The entity is not found, or is found but holds no qualifying scheme role.
+    </ResponseField>
+    <ResponseField name="stale">
+      The market's scheme register copy is out of date; no participating result can be returned until it refreshes.
+    </ResponseField>
+    <ResponseField name="scheme_register_unavailable">
+      No live scheme register integration exists for this market.
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="qualifying_category_guids" type="array">
+  Present only when `participating`. The scheme category identifiers the entity qualifies under.
+</ResponseField>
+
+<ResponseField name="source" type="string">
+  The resolved register for the market (e.g. `acma_scheme_register`).
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Human-readable outcome.
+</ResponseField>
+
+## Example
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://api.senderz.ai/v1/scheme-check \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "registration_number": "80104930743",
+    "registration_type": "ABN",
+    "country": "AU"
+  }'
+```
+
+</CodeGroup>
+
+```json 200
+{
+  "ok": true,
+  "data": {
+    "outcome": "participating",
+    "qualifying_category_guids": [
+      "20d3ec20-18fe-ef11-bae3-7c1e5262f875"
+    ],
+    "source": "acma_scheme_register",
+    "message": "Entity is an approved scheme participant"
+  },
+  "meta": {
+    "request_id": "req_scheme123",
+    "timestamp": "2026-09-19T14:30:00+10:00"
+  }
+}
+```

@@ -1,0 +1,32 @@
+---
+title: "Associate Authorisations overview"
+description: "Request a Brand Owner's authorisation to send under their existing registered Sender IDs."
+---
+
+An **entity associate** is a business authorised by another entity (the Brand Owner) to send messages using that owner's registered Sender ID. Unlike registering a new Sender ID, an associate authorisation records permission to *use an existing* Sender ID.
+
+The Associate Authorisations endpoints let a partner request these authorisations programmatically, as a batch across multiple clients and Sender IDs in a single call. Each requested tuple emails the Brand Owner's representative a secure one-time link; the owner confirms or declines through that link.
+
+## The flow
+
+1. **Request** — `POST /v1/associate-authorisations` with one or more clients, each with the Sender IDs you seek to send under. Each `(client, sender_id)` pair creates one authorisation in state `awaiting_owner_confirmation` and emails the owner's representative a secure link.
+2. **Owner acts** — the Brand Owner confirms or declines via their emailed link. This step is owner-only and is not exposed over the API: an associate can never approve the consent it is requesting.
+3. **Track** — poll `GET /v1/associate-authorisations` (and the detail endpoint) to see each authorisation advance through `authorised` → `pending_acma` → `active`, or `declined`.
+
+<Note>
+Owner confirm and decline are deliberately not available over the API. The Brand Owner's authorisation must come from the owner, through their own secure link. This protects the integrity of the consent the associate is seeking.
+</Note>
+
+## Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Request authorisations" icon="paper-plane" href="/sender-id-api/request-authorisations">
+    Batch-request authorisations across multiple clients and Sender IDs.
+  </Card>
+  <Card title="List authorisations" icon="list" href="/sender-id-api/list-authorisations">
+    List and filter your authorisation requests.
+  </Card>
+  <Card title="Get authorisation" icon="magnifying-glass" href="/sender-id-api/get-authorisation">
+    Retrieve a single authorisation by ID.
+  </Card>
+</CardGroup>

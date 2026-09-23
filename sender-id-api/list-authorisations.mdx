@@ -1,0 +1,69 @@
+---
+title: "List authorisations"
+description: "List and filter your associate authorisation requests."
+---
+
+List the associate authorisations belonging to your account, newest first, with cursor pagination and optional filters.
+
+<api method="GET" url="https://api.senderz.ai/v1/associate-authorisations" />
+
+**Required permission:** `authorisations:read`
+
+## Query parameters
+
+<ParamField query="state" type="string">
+  Filter by state: `awaiting_owner_confirmation`, `awaiting_sid_verification`, `authorised`, `pending_acma`, `active`, `declined`.
+</ParamField>
+
+<ParamField query="country" type="string">
+  Filter by market (ISO 3166-1 alpha-2).
+</ParamField>
+
+<ParamField query="owner_entity_abn" type="string">
+  Filter by the Brand Owner's registration number.
+</ParamField>
+
+<ParamField query="claimed_sender_id" type="string">
+  Filter by Sender ID.
+</ParamField>
+
+<ParamField query="cursor" type="string">
+  Pagination cursor from a previous response's `pagination.next_cursor`.
+</ParamField>
+
+<ParamField query="limit" type="integer">
+  Page size (default 25, max 100).
+</ParamField>
+
+## Example
+
+<CodeGroup>
+
+```bash cURL
+curl "https://api.senderz.ai/v1/associate-authorisations?state=pending_acma&country=AU" \
+  -H "Authorization: Bearer sz_live_xxxxxxxxxxxx"
+```
+
+</CodeGroup>
+
+```json 200
+{
+  "ok": true,
+  "data": [
+    {
+      "id": "aa_a1b2c3",
+      "state": "pending_acma",
+      "country": "AU",
+      "claimed_sender_id": "CHIC",
+      "owner_entity_name": "CHIC MANAGEMENT PTY LIMITED",
+      "owner_entity_abn": "80104930743",
+      "owner_confirmed_at": "2026-09-19T13:15:00+10:00"
+    }
+  ],
+  "pagination": { "has_more": false, "next_cursor": null },
+  "meta": {
+    "request_id": "req_list123",
+    "timestamp": "2026-09-19T14:30:00+10:00"
+  }
+}
+```
